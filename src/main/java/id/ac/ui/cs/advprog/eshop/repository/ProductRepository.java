@@ -69,6 +69,6 @@ public class ProductRepository {
                 return currProduct;
             }
         }
-        throw new IllegalArgumentException("Product ID invalid");
+        throw new IllegalArgumentException("Product ID is invalid");
     }
 }
