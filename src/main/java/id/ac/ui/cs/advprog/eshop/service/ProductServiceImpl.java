@@ -12,6 +12,7 @@ import java.util.List;
 public class ProductServiceImpl implements  ProductService{
 
     private long productIdCounter = 1;
+
     @Autowired
     private ProductRepository productRepository;
 
