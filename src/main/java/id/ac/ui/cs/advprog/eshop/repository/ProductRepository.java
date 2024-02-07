@@ -6,9 +6,11 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class ProductRepository {
+
     private List<Product> productData = new ArrayList<>();
 
     public Product create(Product product) {
@@ -18,5 +20,55 @@ public class ProductRepository {
 
     public Iterator<Product> findAll() {
         return productData.iterator();
+    }
+
+    public Product findById(String id) {
+        Iterator<Product> productIterator = findAll();
+
+        while (productIterator.hasNext()) {
+            Product product = productIterator.next();
+            System.out.println(product.getProductId());
+            if (product.getProductId().equals(id)) {
+                return product;
+            }
+        }
+        throw new IllegalArgumentException("Product with ID " + id + " not found");
+    }
+
+    public void edit(Product updatedProduct) {
+        String id = updatedProduct.getProductId();
+
+        for (int i = 0; i < productData.size(); i++) {
+            if (productData.get(i).getProductId().equals(id)) {
+                productData.set(i, updatedProduct);
+                return;
+            }
+        }
+        throw new IllegalArgumentException("Product with ID " + id + " not found");
+    }
+
+    public void deleteProductById(String id) {
+        Iterator<Product> productIterator = findAll();
+
+        while (productIterator.hasNext()) {
+            Product product = productIterator.next();
+            if (product.getProductId().equals(id)) {
+                productIterator.remove();
+                return;
+            }
+        }
+
+        throw new IllegalArgumentException("Product with ID " + id + " not found");
+    }
+
+    public Product getProductById(String productId){
+        Iterator<Product> products = findAll();
+        while(products.hasNext()){
+            Product currProduct = products.next();
+            if (productId.equals(currProduct.getProductId())){
+                return currProduct;
+            }
+        }
+        throw new IllegalArgumentException("Product ID invalid");
     }
 }
