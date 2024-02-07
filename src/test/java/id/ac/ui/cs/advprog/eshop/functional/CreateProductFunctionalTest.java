@@ -38,23 +38,22 @@ class CreateProductFunctionalTest {
         checkInput = driver.findElement(By.id("create"));
         checkInput.click();
 
-        // isi nama produk
+        // Mengisi nama product
         WebElement inputField = driver.findElement(By.id("nameInput"));
         inputField.clear();
-        inputField.sendKeys("Laptop");
+        inputField.sendKeys("Kucing Gemuk");
 
-        // isi kuantiti produk
+        // Mengisi kuantitas product
         inputField = driver.findElement(By.id("quantityInput"));
         inputField.clear();
-        inputField.sendKeys("123");
+        inputField.sendKeys("911");
 
-        // submit
+        // Klik tombol submit
         WebElement nameInput = driver.findElement(By.id("submit"));
         nameInput.click();
 
         // Cek apakah berhasil tersimpan
         WebElement firstProduct = driver.findElement(By.className("productName"));
-        assertEquals(firstProduct.getText(), "Laptop");
+        assertEquals(firstProduct.getText(), "Kucing Gemuk");
     }
-
 }
