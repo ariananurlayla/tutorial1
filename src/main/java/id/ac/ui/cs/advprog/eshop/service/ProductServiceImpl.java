@@ -10,11 +10,14 @@ import java.util.List;
 
 @Service
 public class ProductServiceImpl implements  ProductService{
+
+    private long productIdCounter = 1;
     @Autowired
     private ProductRepository productRepository;
 
     @Override
     public Product create(Product product){
+        product.setProductId(String.valueOf(productIdCounter++));
         productRepository.create(product);
         return product;
     }
@@ -22,22 +25,28 @@ public class ProductServiceImpl implements  ProductService{
     @Override
     public List<Product> findAll(){
         Iterator<Product> productIterator = productRepository.findAll();
-
         List<Product> allProduct = new ArrayList<>();
         productIterator.forEachRemaining((allProduct::add));
         return allProduct;
     }
 
     @Override
-    public void deleteProductById(String id){
-        Iterator<Product> productIterator = productRepository.findAll();
+    public void edit(Product product){
+        productRepository.edit(product);
+    }
 
-        while (productIterator.hasNext()){
-            Product product = productIterator.next();
-            if (product.getProductId().equals(id)){
-                productIterator.remove();
-                break;
-            }
-        }
+    @Override
+    public Product findById(String id) {
+        return productRepository.findById(id);
+    }
+
+    @Override
+    public void deleteProductById(String id){
+        productRepository.deleteProductById(id);
+    }
+
+    @Override
+    public Product getProductById(String productId){
+        return productRepository.getProductById(productId);
     }
 }
