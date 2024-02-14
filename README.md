@@ -1,3 +1,5 @@
+App link: https://eshop-ariananurlayla.koyeb.app/
+
 <h1>Refleksi 1</h1>
 
 <h2>Clean Code:</h2>
@@ -50,4 +52,25 @@
       </li>
     </ul>
   </li>
+</ol>
+
+
+<h1>Refleksi 3 (Module 2)</h1>
+
+<ol>
+  <li>
+    <h2>Code quality issues:</h2>
+    <ul>
+      <li>Code reliability diselesaikan dengan mengikuti instruksi yang tersedia, yaitu menambahkan deskripsi ke table yang digunakan.</li>
+      <li>Rename template file html karena case sensitive.</li>
+    </ul>
+  </li>
+    <li>
+        <ul>
+            <li>Proyek telah menerapkan prinsip Continuous Integration (CI) dan Continuous Deployment (CD).</li>
+            <li>CI melakukan verifikasi secara otomatis pada codebase setiap kali ada perubahan, contohnya saat menjalankan unit test dan memeriksa keamanan kode menggunakan tools, seperti SonarCloud dan OSSF Scorecard.</li>
+            <li>Selanjutnya, CD artinya melakukan deploy secara otomatis setiap tersedia build terbaru dari codebase, seperti Koyeb yang dapat digunakan untuk deployment otomatis.</li>
+            <li>Dengan demikian, proyek ini telah menggabungkan CI dan CD untuk memastikan pengujian dan deployment yang konsisten setiap terjadi perubahan pada codebase.</li>
+        </ul>
+    </li>
 </ol>
