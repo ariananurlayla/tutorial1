@@ -11,20 +11,19 @@ import java.util.List;
 
 @Controller
 public class ProductController {
-
     @Autowired
     private ProductService service;
 
-    @GetMapping
-    public String index(){
-        return "home";
+    @GetMapping("")
+    public String home(Model model){
+        return "Home";
     }
 
     @GetMapping("/product/create")
     public String createProductPage(Model model){
         Product product = new Product();
         model.addAttribute("product", product);
-        return "createProduct";
+        return "CreateProduct";
     }
 
     @PostMapping("/product/create")
@@ -37,24 +36,25 @@ public class ProductController {
     public String productListPage(Model model){
         List<Product> allProducts = service.findAll();
         model.addAttribute("products", allProducts);
-        return "productList";
+        return "ProductList";
     }
 
-    @GetMapping("/product/edit/{id}")
-    public String editProductPage(@PathVariable("id") String id, Model model){
-        Product product = service.findById(id);
+    @GetMapping("/product/edit/{productId}")
+    public String editProductPage(@PathVariable String productId, Model model){
+        Product product = service.getProductById(productId);
         model.addAttribute("product", product);
-        return "editProduct";
+        return "EditProduct";
     }
 
-    @PostMapping("/product/edit")
+    @PostMapping("/product/edit/save")
     public String editProductPost(@ModelAttribute Product product, Model model){
         service.edit(product);
-        return "redirect:list";
+        return "redirect:../list";
     }
-    @GetMapping("/product/delete/{id}")
-    public String deleteProduct(@PathVariable String id, Model model){
-        service.deleteProductById(id);
+
+    @GetMapping("/product/delete/{productId}")
+    public String deleteProduct(@PathVariable String productId, Model model) {
+        service.delete(productId);
         return "redirect:../list";
     }
 }
