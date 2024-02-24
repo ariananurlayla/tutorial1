@@ -13,47 +13,53 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
+
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @ExtendWith(SeleniumJupiter.class)
-class CreateProductFunctionalTest {
+public class CreateProductFunctionalTest {
+    /**
+     * The port number assigned to the running application during test execution.
+     * Set automatically during each terst run by Spring Framework's test context.
+     */
     @LocalServerPort
     private int serverPort;
+
+    /**
+     * The base URL for testing. Default to {@code http://localhost}.
+     */
     @Value("${app.baseUrl:http://localhost}")
     private String testBaseUrl;
+
     private String baseUrl;
 
     @BeforeEach
     void setupTest() {
-        baseUrl = String.format("%s:%d", testBaseUrl, serverPort);
+        baseUrl = String.format("%s:%d/product/list", testBaseUrl, serverPort);
     }
+
     @Test
-    void createProduct_isCorrect (ChromeDriver driver) throws Exception {
+    void createProduct(ChromeDriver driver) throws Exception{
+        //Exercise
         driver.get(baseUrl);
+        driver.findElement(By.id("createBtn")).click();
 
-        // Klik tombol product
-        WebElement checkInput = driver.findElement(By.id("product"));
-        checkInput.click();
+        String productName = "Pensil";
+        WebElement nameInput = driver.findElement(By.id("nameInput"));
+        nameInput.clear();
+        nameInput.sendKeys(productName);
 
-        // Klik tombol create
-        checkInput = driver.findElement(By.id("create"));
-        checkInput.click();
+        WebElement quantityInput = driver.findElement(By.id("quantityInput"));
+        quantityInput.clear();
+        quantityInput.sendKeys("10");
 
-        // Mengisi nama product
-        WebElement inputField = driver.findElement(By.id("nameInput"));
-        inputField.clear();
-        inputField.sendKeys("Kucing Gemuk");
+        WebElement submitButton = driver.findElement(By.id("submitButton"));
+        submitButton.click();
 
-        // Mengisi kuantitas product
-        inputField = driver.findElement(By.id("quantityInput"));
-        inputField.clear();
-        inputField.sendKeys("911");
+        WebElement columnProductName = driver.findElement(By.className("productName"));
+        WebElement columnProductQuantity = driver.findElement(By.className("productQuantity"));
 
-        // Klik tombol submit
-        WebElement nameInput = driver.findElement(By.id("submit"));
-        nameInput.click();
-
-        // Cek apakah berhasil tersimpan
-        WebElement firstProduct = driver.findElement(By.className("productName"));
-        assertEquals(firstProduct.getText(), "Kucing Gemuk");
+        //Verify
+        assertEquals(productName, columnProductName.getText());
+        assertEquals("10", columnProductQuantity.getText());
     }
 }
