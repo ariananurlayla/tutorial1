@@ -10,51 +10,47 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
+@RequestMapping("/product")
 public class ProductController {
-
     @Autowired
     private ProductService service;
 
-    @GetMapping
-    public String index(){
-        return "home";
-    }
-
-    @GetMapping("/product/create")
+    @GetMapping("/create")
     public String createProductPage(Model model){
         Product product = new Product();
         model.addAttribute("product", product);
         return "createProduct";
     }
 
-    @PostMapping("/product/create")
+    @PostMapping("/create")
     public String createProductPost(@ModelAttribute Product product, Model model){
         service.create(product);
         return "redirect:list";
     }
 
-    @GetMapping("/product/list")
-    public String productListPage(Model model){
-        List<Product> allProducts = service.findAll();
-        model.addAttribute("products", allProducts);
-        return "productList";
-    }
-
-    @GetMapping("/product/edit/{id}")
-    public String editProductPage(@PathVariable("id") String id, Model model){
-        Product product = service.findById(id);
+    @GetMapping("/edit/{productId}")
+    public String editProductPage(@PathVariable String productId, Model model){
+        Product product = service.getProductById(productId);
         model.addAttribute("product", product);
         return "editProduct";
     }
 
-    @PostMapping("/product/edit")
+    @PostMapping("/edit/save")
     public String editProductPost(@ModelAttribute Product product, Model model){
         service.edit(product);
-        return "redirect:list";
-    }
-    @GetMapping("/product/delete/{id}")
-    public String deleteProduct(@PathVariable String id, Model model){
-        service.deleteProductById(id);
         return "redirect:../list";
+    }
+
+    @GetMapping("/delete/{productId}")
+    public String deleteProduct(@PathVariable String productId, Model model) {
+        service.delete(productId);
+        return "redirect:../list";
+    }
+
+    @GetMapping("/list")
+    public String productListPage(Model model){
+        List<Product> allProducts = service.findAll();
+        model.addAttribute("products", allProducts);
+        return "productList";
     }
 }
