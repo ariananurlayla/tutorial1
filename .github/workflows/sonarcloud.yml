@@ -1,16 +1,8 @@
-
-name: SonarCloud analysis
-
+name: SonarCloud
 on:
   push:
-    branches: [ "*" ]
   pull_request:
-    branches: [ "*" ]
-  workflow_dispatch:
-
-permissions:
-  pull-requests: read # allows SonarCloud to decorate PRs with analysis results
-
+    types: [opened, synchronize, reopened]
 jobs:
   Analysis:
     runs-on: ubuntu-latest
@@ -26,13 +18,50 @@ jobs:
           java-version: "21"
           cache: "gradle"
 
+      - name: Set gradlew as executable
+        run: chmod +x ./gradlew
+
       - name: Build with Gradle
         run: ./gradlew build
 
       - name: Analyze with SonarCloud
-
-        # You can pin the exact commit or the version.
         uses: SonarSource/sonarcloud-github-action@master
+
+#
+#name: SonarCloud analysis
+#
+#on:
+#  push:
+#    branches: [ "*" ]
+#  pull_request:
+#    branches: [ "*" ]
+#  workflow_dispatch:
+#
+#permissions:
+#  pull-requests: read # allows SonarCloud to decorate PRs with analysis results
+#
+#jobs:
+#  Analysis:
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Check out the Git repository
+#        uses: actions/checkout@v4
+#
+#      - name: Set up Java toolchain
+#        uses: actions/setup-java@v4
+#        with:
+#          distribution: "temurin"
+#          java-version: "21"
+#          cache: "gradle"
+#
+#      - name: Build with Gradle
+#        run: ./gradlew build
+#
+#      - name: Analyze with SonarCloud
+#
+#        # You can pin the exact commit or the version.
+#        uses: SonarSource/sonarcloud-github-action@master
 
 #name: SonarCloud analysis
 #
