@@ -12,12 +12,14 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
+
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @ExtendWith(SeleniumJupiter.class)
-class HomePageFunctionalTest {
-
+public class HomePageFunctionalTest {
     /**
-     * The port number assigned to the running application during test execution. * Set automatically during each test run by Spring Framework's test context. */
+     * The port number assigned to the running application during test execution.
+     * Set automatically during each test run by Spring Framework's test context.
+     */
     @LocalServerPort
     private int serverPort;
 
@@ -30,25 +32,29 @@ class HomePageFunctionalTest {
     private String baseUrl;
 
     @BeforeEach
-    void setupTest() {
+    void setupTest(){
         baseUrl = String.format("%s:%d", testBaseUrl, serverPort);
     }
-    @Test
 
-    void pageTitle_isCorrect (ChromeDriver driver) throws Exception {
-        // Exercise
+    @Test
+    void pageTitle_isCorrect(ChromeDriver driver) throws Exception{
+
+        //Exercise
         driver.get(baseUrl);
         String pageTitle = driver.getTitle();
-        // Verify
+
+        //Verify
         assertEquals("ADV Shop", pageTitle);
     }
 
     @Test
-    void welcomeMessage_homePage_isCorrect (ChromeDriver driver) throws Exception { // Exercise
+    void welcomeMessage_homePage_isCorrect(ChromeDriver driver) throws Exception{
+
+        //Exercise
         driver.get(baseUrl);
         String welcomeMessage = driver.findElement(By.tagName("h3")).getText();
 
-        // Verify
+        //Verify
         assertEquals("Welcome", welcomeMessage);
     }
 }

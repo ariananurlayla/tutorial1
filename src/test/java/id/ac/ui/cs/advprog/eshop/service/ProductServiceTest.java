@@ -1,95 +1,110 @@
 package id.ac.ui.cs.advprog.eshop.service;
 
 import id.ac.ui.cs.advprog.eshop.model.Product;
+import id.ac.ui.cs.advprog.eshop.repository.ProductRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import static org.mockito.ArgumentMatchers.any;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ProductServiceTest {
 
+    @Mock
+    ProductRepository productRepository;
     @InjectMocks
     ProductServiceImpl service;
 
+    @BeforeEach
+    void setUp() {
+    }
+
     @Test
-    void testCreateProduct() {
+    void testCreateAndFind(){
 
-        // Create 5 new product
-        for (int i = 0; i < 5;i++){
-            Product product = new Product();
-            product.setProductName(String.valueOf(i+10));
-            product.setProductQuantity(i+20);
+        // Creating new products
+        Product product1 = new Product();
+        product1.setProductId("a1b2c3d4e5");
+        product1.setProductName("Sampo Cap Bambang");
+        product1.setProductQuantity(100);
 
+        when(productRepository.create(any(Product.class))).thenReturn(product1);
+        service.create(product1);
 
-            service.create(product);
-        }
+        Product product2 = new Product();
+        product2.setProductId("a0f9de46-90b1-437d-a0bf-d0821dde9096");
+        product2.setProductName("Sampo Cap Usep");
+        product2.setProductQuantity(200);
 
-        // Check if it is there
+        when(productRepository.create(any(Product.class))).thenReturn(product2);
+        service.create(product2);
+
+        // Verifying create
+        verify(productRepository,times(1)).create(product1);
+        verify(productRepository,times(1)).create(product2);
+
+        // Verifying findAll
+        Iterator<Product> productIterator = Arrays.asList(product1, product2).iterator();
+        when(productRepository.findAll()).thenReturn(productIterator);
+
         List<Product> productList = service.findAll();
-        for (int i = 0; i < 5;i++){
-            Product product = productList.get(i);
-
-            assertEquals(product.getProductId(), String.valueOf(i+1));
-            assertEquals(product.getProductName(), String.valueOf(i+10));
-            assertEquals(product.getProductQuantity(), i+20);
-        }
+        assertFalse(productList.isEmpty());
+        Product savedProduct = productList.getFirst();
+        assertEquals(product1.getProductId(), savedProduct.getProductId());
+        assertEquals(product1.getProductName(), savedProduct.getProductName());
+        assertEquals(product1.getProductQuantity(), savedProduct.getProductQuantity());
     }
 
     @Test
-    void testFindProduct(){
-
-        // Create new product
-        Product product = new Product();
-        product.setProductName("Ipad");
-        product.setProductQuantity(12);
-        service.create(product);
-
-        // Find the product
-        Product foundProduct =  service.findById("1");
-        assertEquals(foundProduct.getProductName(), "Ipad");
-
+    void testDelete(){
+        service.delete("02");
+        verify(productRepository,times(1)).delete("02");
     }
 
     @Test
-    void testSaveProduct(){
+    void testGetProductById(){
 
-        // Create new product
-        Product product = new Product();
-        product.setProductName("Ipad");
-        product.setProductQuantity(12);
-        service.create(product);
+        // Set up
+        Product product1 = new Product();
+        product1.setProductId("a1b2c3d4e5");
+        product1.setProductName("Sampo Cap Bambang");
+        product1.setProductQuantity(100);
 
-        // Update product name & quantity
-        product.setProductName("Laptop");
-        product.setProductQuantity(15);
-        service.edit(product);
+        when(productRepository.getProductById("a1b2c3d4e5")).thenReturn(product1);
+        Product result = service.getProductById("a1b2c3d4e5");
 
-        // Check
-        Product foundProduct =  service.findById("1");
-        assertEquals(foundProduct.getProductName(), "Laptop");
-        assertEquals(foundProduct.getProductQuantity(), 15);
-
+        // Verification
+        verify(productRepository,times(1)).getProductById("a1b2c3d4e5");
+        assertEquals(product1.getProductName(), result.getProductName());
+        assertEquals(product1.getProductQuantity(), result.getProductQuantity());
     }
 
     @Test
-    void testDeleteProduct(){
+    void testEdit(){
 
-        // Create new product
-        Product product = new Product();
-        product.setProductName("Ipad");
-        product.setProductQuantity(12);
-        service.create(product);
+        // Set up
+        Product product2 = new Product();
+        product2.setProductId("a0f9de46-90b1-437d-a0bf-d0821dde9096");
+        product2.setProductName("Sampo Cap Usep");
+        product2.setProductQuantity(200);
 
-        // Delete product
-        service.deleteProductById(product.getProductId());
+        when(productRepository.edit(product2)).thenReturn(product2);
+        Product result = service.edit(product2);
 
-        // Check
-        assertThrows(IllegalArgumentException.class, () -> service.findById("1"));
-
+        // Verification
+        verify(productRepository,times(1)).edit(product2);
+        assertEquals(product2.getProductName(), result.getProductName());
+        assertEquals(product2.getProductQuantity(), result.getProductQuantity());
     }
 }
