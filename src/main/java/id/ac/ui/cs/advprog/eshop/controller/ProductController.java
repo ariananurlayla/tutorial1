@@ -12,14 +12,8 @@ import java.util.List;
 @Controller
 @RequestMapping("/product")
 public class ProductController {
-
     @Autowired
     private ProductService service;
-
-//    @GetMapping
-//    public String index(){
-//        return "home";
-//    }
 
     @GetMapping("/create")
     public String createProductPage(Model model){
@@ -40,7 +34,6 @@ public class ProductController {
         model.addAttribute("products", allProducts);
         return "productList";
     }
-
 
     @GetMapping("/edit/{productId}")
     public String editProductPage(@PathVariable String productId, Model model){
